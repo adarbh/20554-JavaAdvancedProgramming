@@ -44,5 +44,11 @@ public abstract class Employee {
                 getFirstName(), getLastName(), getSocialSecurityNumber(), getChildren());
     }
 
+    @Override
+    public boolean equals(Object other){
+        Employee otherEmployee = (Employee)other;
+        return getSocialSecurityNumber().equals(otherEmployee.getSocialSecurityNumber());
+    }
+
     public abstract double earnings();
 }
