@@ -69,7 +69,9 @@ public class WordGuessGame {
 
         /* Get the word and the alphabet */
         Word word = this.word_database.getWord();
-        ArrayList possibleValues = this.word_database.getAlphabet();
+        ArrayList possibleValues = new ArrayList();
+        //ArrayList possibleValues = this.word_database.getAlphabet();
+        possibleValues.addAll(this.word_database.getAlphabet());
 
         /* Start the guesses */
         while (is_guess_needed) {

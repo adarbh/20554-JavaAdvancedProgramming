@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.File;
 import java.util.stream.Stream;
 
 /**
@@ -30,11 +29,7 @@ public class WordDatabase {
         int k = 0;
 
         /* Read words from file */
-        //Path file_path = Paths.get("C:\\Users\\Adar\\IdeaProjects\\20554-JavaAdvancedProgramming\\Exercise11\\Part1\\top_english_words.txt");
-        String filePath = new File("").getAbsolutePath();
-        filePath = filePath.concat("top_english_words.txt");
-        System.out.println(filePath);
-        Path file_path = Paths.get(filePath);
+        Path file_path = Paths.get("top_english_words.txt");
 
         try (Stream<String> lines = Files.lines(file_path)) {
             lines.forEach(s -> this.words.add(new Word(s)));
