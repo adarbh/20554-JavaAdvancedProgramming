@@ -1,14 +1,16 @@
 package Part1;
 
+import java.util.ArrayList;
+
 /**
  * Created by Adar on 4/16/2017.
  */
 public class SalariedEmployee extends Employee {
     private double weeklySalary;
 
-    public SalariedEmployee(String firstName, String lastName, String socialSecurityNumber,
+    public SalariedEmployee(String firstName, String lastName, String socialSecurityNumber, ArrayList children,
                             double weeklySalary) {
-        super(firstName, lastName, socialSecurityNumber);
+        super(firstName, lastName, socialSecurityNumber, children);
 
         if(weeklySalary < 0.0) {
             throw new IllegalArgumentException("Weekly salary must be >= 0.0");

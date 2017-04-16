@@ -1,5 +1,7 @@
 package Part1;
 
+import java.util.ArrayList;
+
 /**
  * Created by Adar on 4/16/2017.
  */
@@ -7,9 +9,9 @@ public class HourlyEmployee extends Employee {
     private double wage;
     private double hours;
 
-    public HourlyEmployee(String firstName, String lastName, String socialSecurityNumber,
+    public HourlyEmployee(String firstName, String lastName, String socialSecurityNumber, ArrayList children,
                           double wage, double hours) {
-        super(firstName, lastName, socialSecurityNumber);
+        super(firstName, lastName, socialSecurityNumber, children);
 
         if (wage < 0.0) {
             throw new IllegalArgumentException("Hourly salary must be >= 0.0");

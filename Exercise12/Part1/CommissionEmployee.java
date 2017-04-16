@@ -1,5 +1,7 @@
 package Part1;
 
+import java.util.ArrayList;
+
 /**
  * Created by Adar on 4/16/2017.
  */
@@ -7,9 +9,9 @@ public class CommissionEmployee extends Employee {
     private double grossSales;
     private double commissionRate;
 
-    public CommissionEmployee(String firstName, String lastName, String socialSecurityNumber,
+    public CommissionEmployee(String firstName, String lastName, String socialSecurityNumber, ArrayList children,
                               double grossSales, double commissionRate) {
-        super(firstName, lastName, socialSecurityNumber);
+        super(firstName, lastName, socialSecurityNumber, children);
 
         if (commissionRate <= 0.0 || commissionRate >= 1.0) {
             throw new IllegalArgumentException("Commission rate must be > 0.0 and < 1.0");

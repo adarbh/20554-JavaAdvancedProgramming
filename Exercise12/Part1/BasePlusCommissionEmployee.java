@@ -1,14 +1,16 @@
 package Part1;
 
+import java.util.ArrayList;
+
 /**
  * Created by Adar on 4/16/2017.
  */
 public class BasePlusCommissionEmployee extends CommissionEmployee {
     private double baseSalary;
 
-    public BasePlusCommissionEmployee(String firstName, String lastName, String socialSecurityNumber,
+    public BasePlusCommissionEmployee(String firstName, String lastName, String socialSecurityNumber, ArrayList children,
                                       double grossSales, double commissionRate, double baseSalary) {
-        super(firstName, lastName, socialSecurityNumber, grossSales, commissionRate);
+        super(firstName, lastName, socialSecurityNumber, children, grossSales, commissionRate);
 
         if (baseSalary < 0.0) {
             throw new IllegalArgumentException("Base salary must be >= 0.0");
