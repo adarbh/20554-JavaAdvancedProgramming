@@ -51,7 +51,7 @@ public class Main {
         System.out.println(salariedEmployee2.toString() + "\n");
         System.out.println(String.format("Are %s and %s equal? ",
                 salariedEmployee.getFirstName(), salariedEmployee2.getFirstName()) +
-                salariedEmployee.equals(salariedEmployee2));
+                salariedEmployee.equals(salariedEmployee2) + "\n");
 
         /* Demonstrate the clone function */
         CommissionEmployee commissionEmployee2 = (CommissionEmployee)commissionEmployee.clone();
@@ -64,9 +64,10 @@ public class Main {
                 commissionEmployee.getFirstName(), commissionEmployee2.getFirstName()) +
                 commissionEmployee.equals(commissionEmployee2));
 
-        System.out.println(String.format("Adding a child to %s.\n", commissionEmployee.getFirstName()));
+        System.out.println("Adding a child to the original employee.\n");
         commissionEmployee.addChild("318063451");
         System.out.println("The original employee: \n" + commissionEmployee.toString() + "\n");
         System.out.println("The cloned employee: \n" + commissionEmployee2.toString() + "\n");
+        System.out.println("The new child was only added to the original employee.");
     }
 }
