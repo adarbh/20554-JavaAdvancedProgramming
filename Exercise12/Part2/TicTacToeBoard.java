@@ -6,6 +6,9 @@ import java.util.ArrayList;
  * Created by Adar on 4/21/2017.
  */
 public class TicTacToeBoard implements Cloneable{
+    /**
+     * This class represents a TicTacToeBoard
+     */
 
     private final int DIMENSIONS = 3;
     private TicTacToeCellValue matrix[][];
@@ -14,6 +17,10 @@ public class TicTacToeBoard implements Cloneable{
         EMPTY, X, O
     }
 
+    /**
+     * Returns an TicTacToeBoard object
+     * @return      the TicTacToeBoard object
+     */
     public TicTacToeBoard() {
         this.matrix = new TicTacToeCellValue[this.DIMENSIONS][this.DIMENSIONS];
 
@@ -25,18 +32,38 @@ public class TicTacToeBoard implements Cloneable{
         }
     }
 
+    /**
+     * Returns the value of a cell on the board
+     * @param  row the cell row
+     * @param  col the cell col
+     * @return   the cell value
+     */
     public TicTacToeCellValue getCell(int row, int col) {
         return this.matrix[row][col];
     }
 
+    /**
+     * Sets the value of a cell on the board
+     * @param  row the cell row
+     * @param  col the cell col
+     * @param  value the new value of the cell
+     */
     public void setCell(int row, int col, TicTacToeCellValue value) {
         this.matrix[row][col] = value;
     }
 
+    /**
+     * Returns the board dimensions
+     * @return   the board dimensions
+     */
     public int getDimensions() {
         return this.DIMENSIONS;
     }
 
+    /**
+     * Checks if the board is full. The board is full when there is no EMPTY cell.
+     * @return   true if the board is full, false otherwise
+     */
     public boolean isBoardFull() {
         for (int i = 0 ; i < this.DIMENSIONS ; i++) {
             for (int j = 0; j < this.DIMENSIONS ; j++) {
@@ -48,6 +75,11 @@ public class TicTacToeBoard implements Cloneable{
         return true;
     }
 
+    /**
+     * Checks if a player of a given kind won the game. The winner should have a full line/column/diagonal.
+     * @param  value the value attached to the player (X/O)
+     * @return   true if the player won, false otherwise
+     */
     private boolean hasPlayerWon(TicTacToeCellValue value) {
         int numOfMatches = 0;
 
@@ -101,14 +133,26 @@ public class TicTacToeBoard implements Cloneable{
         return (numOfMatches == this.DIMENSIONS);
     }
 
+    /**
+     * Checks if X won the game
+     * @return   true if X won, false otherwise
+     */
     public boolean hasXWon() {
         return this.hasPlayerWon(TicTacToeCellValue.X);
     }
 
+    /**
+     * Checks if O won the game
+     * @return   true if O won, false otherwise
+     */
     public boolean hasOWon() {
         return this.hasPlayerWon(TicTacToeCellValue.O);
     }
 
+    /**
+     * Returns the empty cells on the board
+     * @return   the list of empty cells indexes in an String format ("<row>, <col>")
+     */
     public ArrayList<String> getEmptyCells() {
         ArrayList<String> emptyCells = new ArrayList<String>();
 

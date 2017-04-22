@@ -8,20 +8,36 @@ import java.util.Random;
  * Created by Adar on 4/21/2017.
  */
 public class TicTacToeGame {
+    /**
+     * This class represents a TicTacToeGame
+     */
 
     private String game_title;
     private JFrame frame;
 
+    /**
+     * Returns an TicTacToeGame object
+     * @return      the TicTacToeGame object
+     */
     public TicTacToeGame() {
         this.game_title = "Tic Tac Toe Game";
     }
 
+    /**
+     * Checks if the user is the player that gets to play first
+     * @return   true if the user gets to be first, false otherwise
+     */
     private boolean isUserFirstPlayer() {
         Random randomGenerator = new Random();
         return randomGenerator.nextBoolean();
     }
 
-    private boolean startUserPlay(TicTacToeBoard board) {
+    /**
+     * Starts a user move in the game
+     * @param  board the game
+     * @return   true if the user did not cancel, false otherwise
+     */
+    private boolean startUserMove(TicTacToeBoard board) {
         Object[] possibleValuesArray = board.getEmptyCells().toArray();
 
         /* Display the work and let the user choose a letter */
@@ -40,7 +56,11 @@ public class TicTacToeGame {
         return true;
     }
 
-    private void startProgramPlay(TicTacToeBoard board) {
+    /**
+     * Starts a program move in the game
+     * @param  board the game board
+     */
+    private void startProgramMove(TicTacToeBoard board) {
         int row = 0;
         int col = 0;
         TicTacToeBoard tmpBoard;
@@ -64,6 +84,28 @@ public class TicTacToeGame {
                 TicTacToeBoard.TicTacToeCellValue.O);
     }
 
+    /**
+     * Checks if the turn is over and displays the results
+     * @param  board the game board
+     * @return   true if the turn is over, false otherwise
+     */
+    private boolean isTurnOver(TicTacToeBoard board) {
+        if (board.hasXWon()) {
+            JOptionPane.showMessageDialog(this.frame, "Congratulations! You have won the game!");
+            return true;
+        } else if (board.hasOWon()) {
+            JOptionPane.showMessageDialog(this.frame, "Sorry, You lost the game.");
+            return true;
+        } else if (board.isBoardFull()){
+            JOptionPane.showMessageDialog(this.frame, "The game was over in a tie.");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Starts a turn of the game
+     */
     private void startTurn() {
         boolean isTurnOver = false;
         boolean isUserFirstPlayer = this.isUserFirstPlayer();
@@ -80,37 +122,38 @@ public class TicTacToeGame {
         while (!isTurnOver) {
 
             if (isUserFirstPlayer) {
-                if (!this.startUserPlay(board)) {
+                if (!this.startUserMove(board)) {
                     return;
                 }
-                if (!board.isBoardFull()) {
-                    this.startProgramPlay(board);
+
+                panel.repaint();
+                isTurnOver = this.isTurnOver(board);
+
+                if (!isTurnOver) {
+                    this.startProgramMove(board);
+                    panel.repaint();
+                    isTurnOver = this.isTurnOver(board);
                 }
+
             } else {
-                this.startProgramPlay(board);
-                if (!board.isBoardFull()) {
-                    if (!this.startUserPlay(board)) {
+                this.startProgramMove(board);
+                panel.repaint();
+                isTurnOver = this.isTurnOver(board);
+
+                if (!isTurnOver) {
+                    if (!this.startUserMove(board)) {
                         return;
                     }
+                    panel.repaint();
+                    isTurnOver = this.isTurnOver(board);
                 }
-            }
-
-            panel.repaint();
-
-            /* Check if there is a winner */
-            if (board.hasXWon()) {
-                JOptionPane.showMessageDialog(this.frame, "Congratulations! You have won the game!");
-                isTurnOver = true;
-            } else if (board.hasOWon()) {
-                JOptionPane.showMessageDialog(this.frame, "Sorry, You lost the game.");
-                isTurnOver = true;
-            } else if (board.isBoardFull()){
-                JOptionPane.showMessageDialog(this.frame, "The game was over in a tie.");
-                isTurnOver = true;
             }
         }
     }
 
+    /**
+     * Starts the game. The game is composed of a set of user and program moves
+     */
     public void startGame() {
         this.frame = new JFrame(this.game_title);
         int startTurn = JOptionPane.YES_OPTION;

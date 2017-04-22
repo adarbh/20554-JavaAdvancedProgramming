@@ -8,9 +8,19 @@ import javax.swing.JPanel;
  * Created by Adar on 4/21/2017.
  */
 public class TicTacToePanel extends JPanel {
+    /**
+     * This class represents a TicTacToePanel
+     */
+
     private TicTacToeBoard board;
     private int frameDimensions;
 
+    /**
+     * Returns an TicTacToePanel object
+     * @param  board the board to paint
+     * @param  frameDimensions the frame dimensions
+     * @return      the TicTacToePanel object
+     */
     public TicTacToePanel(TicTacToeBoard board, int frameDimensions) {
         this.board = board;
         this.frameDimensions = frameDimensions;
