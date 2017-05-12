@@ -1,24 +1,24 @@
+package Part1;
+
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  * Created by Adar on 5/12/2017.
  */
 public class UndirectedGraphFrame extends JFrame implements ActionListener, MouseListener {
+    /**
+     * This class represents an undirected graph frame
+     */
+
     private int frameWidth;
     private int frameHeight;
 
@@ -30,6 +30,10 @@ public class UndirectedGraphFrame extends JFrame implements ActionListener, Mous
     private JButton removeEdgeButton;
     private JPanel buttonPanel;
 
+    /**
+     * Returns an UndirectedGraphFrame object with an initialized graph
+     * @return      the UndirectedGraphFrame object
+     */
     public UndirectedGraphFrame() {
 
         this.frameWidth = 600;
@@ -86,10 +90,14 @@ public class UndirectedGraphFrame extends JFrame implements ActionListener, Mous
 
         /* Configure the frame */
         setSize(this.frameWidth,this.frameHeight);
+        setResizable(false);
         setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
+    /**
+     * Removes node from graph according to user request
+     */
     public void removeNodeFromGraph() {
 
         ArrayList <GraphNode> nodes = this.graph.getNodes();
@@ -126,6 +134,9 @@ public class UndirectedGraphFrame extends JFrame implements ActionListener, Mous
         repaint();
     }
 
+    /**
+     * Adda node to graph according to user request
+     */
     public void addNodeToGraph() {
 
         ArrayList <GraphNode> nodes = this.graph.getNodes();
@@ -158,17 +169,21 @@ public class UndirectedGraphFrame extends JFrame implements ActionListener, Mous
                     getTitle(), JOptionPane.ERROR_MESSAGE);
         }
 
-        //this.graphPanel.repaint();
         repaint();
     }
 
+    /**
+     * Clears the graph according to user request
+     */
     private void clearGraph() {
-        System.out.println("clear pressed");
         this.graph = new UndirectedGraph();
         this.graphPanel.setUndirectedGraph(this.graph);
         repaint();
     }
 
+    /**
+     * Adds edge to graph according to user request
+     */
     private void addEdgeToGraph() {
         ArrayList <GraphNode> nodes = this.graph.getNodes();
         Object[] possibleValuesArray = new Object[nodes.size()];
@@ -215,6 +230,9 @@ public class UndirectedGraphFrame extends JFrame implements ActionListener, Mous
         repaint();
     }
 
+    /**
+     * Removes edge from graph according to user request
+     */
     private void removeEdgeFromGraph() {
         ArrayList <GraphNode> nodes = this.graph.getNodes();
         Object[] possibleValuesArray = new Object[nodes.size()];
