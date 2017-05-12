@@ -5,6 +5,10 @@ public class Main {
 
     public static void main(String [ ] args) {
 
+        UndirectedGraphFrame graphFrame = new UndirectedGraphFrame();
+        //graphFrame.dispose();
+
+        /*
         UndirectedGraph graph = new UndirectedGraph();
         try {
             graph.addNode(new GraphNode('a'));
@@ -43,5 +47,6 @@ public class Main {
             e.printStackTrace();
         }
         System.out.println(graph.equals(graph2));
+        */
     }
 }

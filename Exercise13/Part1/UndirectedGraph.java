@@ -45,10 +45,23 @@ public class UndirectedGraph {
     }
 
     public void removeNode(GraphNode node) throws NodeDoesNotExistException{
+
+        /* Remove the node */
         if (!this.nodes.contains(node)) {
             throw new NodeDoesNotExistException();
         } else {
             this.nodes.remove(node);
+        }
+
+        /* Remove related edges */
+        for (int i = 0; i < this.nodes.size() ; i++) {
+            if (doesEdgeExist(node, this.nodes.get(i))) {
+                try {
+                    removeEdge(node, this.nodes.get(i));
+                } catch (EdgeDoesNotExistException e) {
+                    return;
+                }
+            }
         }
     }
 
@@ -56,7 +69,7 @@ public class UndirectedGraph {
             throws NodeDoesNotExistException, EdgeExistsException{
         if (!this.nodes.contains(node1) || !this.nodes.contains(node2)) {
             throw new NodeDoesNotExistException();
-        } else if (this.doesEdgeExist(node1, node2)) {
+        } else if (this.doesEdgeExist(node1, node2) || this.doesEdgeExist(node2, node1)) {
             throw new EdgeExistsException();
         } else {
             this.edges.add(new Pair(node1, node2));
@@ -64,10 +77,11 @@ public class UndirectedGraph {
     }
 
     public void removeEdge(GraphNode node1, GraphNode node2) throws EdgeDoesNotExistException{
-        if (!this.doesEdgeExist(node1, node2)) {
+        if (!this.doesEdgeExist(node1, node2) && !this.doesEdgeExist(node2, node1)) {
             throw new EdgeDoesNotExistException();
         } else {
             this.edges.remove(new Pair(node1, node2));
+            this.edges.remove(new Pair(node2, node1));
         }
     }
 
@@ -76,7 +90,7 @@ public class UndirectedGraph {
     }
 
     public boolean doesEdgeExist(GraphNode node1, GraphNode node2) {
-        return this.edges.contains(new Pair(node1, node2));
+        return (this.edges.contains(new Pair(node1, node2)) || this.edges.contains(new Pair(node2, node1)));
     }
 
     public ArrayList <GraphNode> getNodes() {
