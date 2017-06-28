@@ -1,9 +1,11 @@
 package MatchPairsGame;
 
+import java.io.Serializable;
+
 /**
  * Created by Adar on 6/24/2017.
  */
-public class MatchPairsCard {
+public class MatchPairsCard implements Serializable {
     
     private boolean isRevealed;
     private int Id;

@@ -2,6 +2,7 @@ package MatchPairsGame;
 
 import javafx.util.Pair;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,7 +10,7 @@ import java.util.Random;
 /**
  * Created by Adar on 6/24/2017.
  */
-public class MatchPairsBoard {
+public class MatchPairsBoard implements Serializable {
 
     private int dimensions;
     private MatchPairsCard boardMatrix[][];
@@ -23,6 +24,10 @@ public class MatchPairsBoard {
         this.boardMatrix = new MatchPairsCard[this.dimensions][this.dimensions];
 
         this.generateBoard();
+    }
+
+    public MatchPairsCard getCard(int row, int col) {
+        return this.boardMatrix[row][col];
     }
 
     public void generateBoard() {
@@ -42,11 +47,11 @@ public class MatchPairsBoard {
         /* Create all the cards */
         for (int i=0 ; i < dimensions ; i++) {
             for (int j = 0; j < dimensions; j++) {
-                if (!cellList.contains(this.boardMatrix[i][j])) {
+                if (!cellList.contains(new Pair(i, j))) {
                     continue;
                 }
 
-                cellList.remove(this.boardMatrix[i][j]);
+                cellList.remove(new Pair(i, j));
                 matchCellIndex = randomGenerator.nextInt(cellList.size());
                 this.boardMatrix[(int) cellList.get(matchCellIndex).getKey()][(int) cellList.get(matchCellIndex).getValue()] = new MatchPairsCard(Id);
                 this.boardMatrix[i][j] = new MatchPairsCard(Id);
@@ -96,5 +101,9 @@ public class MatchPairsBoard {
         }
 
         return true;
+    }
+
+    public int getDimensions() {
+        return this.dimensions;
     }
 }

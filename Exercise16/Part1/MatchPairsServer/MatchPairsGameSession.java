@@ -3,7 +3,6 @@ package MatchPairsServer;
 import MatchPairsGame.IllegalDimensionsException;
 import MatchPairsGame.MatchPairsBoard;
 
-import java.net.Socket;
 import java.util.ArrayList;
 
 /**
@@ -11,18 +10,28 @@ import java.util.ArrayList;
  */
 public class MatchPairsGameSession {
 
-    private ArrayList<Socket> players;
+    private ArrayList<MatchPairsGame.MatchPairsConnection> players;
     private int maxPlayersNum;
     private MatchPairsBoard board;
 
     public MatchPairsGameSession(int maxPlayersNum) {
-        this.players = new ArrayList<Socket>();
+        this.players = new ArrayList<MatchPairsGame.MatchPairsConnection>();
         this.maxPlayersNum = maxPlayersNum;
     }
 
-    public void addPlayer(Socket playerSocket) throws GameFullException {
+    public void addPlayer(MatchPairsGame.MatchPairsConnection playerSocket, int boardDimensions)
+            throws GameFullException, IllegalDimensionsException, DimensionsDoNotMatchException, DimensionsDoNotMatchException {
         if (this.isGameFull()) {
             throw new GameFullException();
+        }
+
+        /* Check if this is the the first player to be added */
+        if (0 == this.players.size()) {
+            createBoard(boardDimensions);
+        } else {
+            if (this.board.getDimensions() != boardDimensions) {
+                throw new DimensionsDoNotMatchException();
+            }
         }
 
         this.players.add(playerSocket);
@@ -32,7 +41,7 @@ public class MatchPairsGameSession {
         return this.maxPlayersNum <= this.players.size();
     }
 
-    public void createBoard(int dimensions) throws IllegalDimensionsException {
+    private void createBoard(int dimensions) throws IllegalDimensionsException {
         this.board = new MatchPairsBoard(dimensions);
     }
 
@@ -40,7 +49,15 @@ public class MatchPairsGameSession {
         return this.board;
     }
 
-    public boolean isPlayerInGame(Socket playerSocket){
-        return this.players.contains(playerSocket);
+    public boolean isPlayerInGame(MatchPairsGame.MatchPairsConnection playerSession){
+        return this.players.contains(playerSession);
+    }
+
+    public boolean isPlayerFirst(MatchPairsGame.MatchPairsConnection playerSession){
+        return 0 == this.players.indexOf(playerSession);
+    }
+
+    public ArrayList<MatchPairsGame.MatchPairsConnection> getPlayers() {
+        return this.players;
     }
 }

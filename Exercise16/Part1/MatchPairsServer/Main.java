@@ -6,7 +6,7 @@ package MatchPairsServer;
 public class Main {
     public static void main(String [ ] args) {
 
-        MatchPairsServer server = new MatchPairsServer(1234);
+        MatchPairsServer server = new MatchPairsServer(4321);
         server.run();
     }
 }
