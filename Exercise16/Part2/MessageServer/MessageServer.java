@@ -73,11 +73,18 @@ public class MessageServer {
 
     public void run() {
 
-        new MessageServerOutputThread(this.clients).start();
+        DatagramSocket socket = null;
+        try {
+            socket = new DatagramSocket(this.port);
+        } catch (SocketException e) {
+            System.out.println("Failed to open socket.");
+            return;
+        }
+
+        new MessageServerOutputThread(this.clients, socket).start();
 
         while (true) {
             try {
-                DatagramSocket socket = new DatagramSocket(this.port);
                 Message message = receiveMessage(socket);
                 switch (message.getMessageType()) {
                     case SIGN_UP_FOR_SERVER_MESSAGE:

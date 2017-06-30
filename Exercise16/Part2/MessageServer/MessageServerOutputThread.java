@@ -24,9 +24,11 @@ public class MessageServerOutputThread extends Thread implements ActionListener{
     private ArrayList<Pair> clients;
     private JFrame frame;
     private JTextArea textArea;
+    private DatagramSocket serverSocket;
 
-    public MessageServerOutputThread(ArrayList<Pair> clients) {
+    public MessageServerOutputThread(ArrayList<Pair> clients, DatagramSocket serverSocket) {
         this.clients = clients;
+        this.serverSocket = serverSocket;
     }
 
     @Override
@@ -35,21 +37,21 @@ public class MessageServerOutputThread extends Thread implements ActionListener{
 
         /* Create the display */
         this.frame = new JFrame("Message server");
-        this.frame.setSize(400, 200);
-        //this.frame.setLayout(new GridLayout(2, 1));
+        this.frame.setSize(510, 200);
         this.frame.setLayout(new FlowLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.textArea = new JTextArea("");
         this.textArea.setLineWrap(true);
         this.textArea.setWrapStyleWord(true);
-        this.textArea.setPreferredSize(new Dimension(300, 100));
+        this.textArea.setPreferredSize(new Dimension(500, 100));
         this.frame.add(this.textArea);
 
         JButton button = new JButton("Send!");
         this.frame.add(button);
         button.addActionListener(this);
 
+        this.frame.setResizable(false);
         this.frame.setVisible(true);
     }
 
@@ -71,14 +73,13 @@ public class MessageServerOutputThread extends Thread implements ActionListener{
             data[3-i] = (byte)((number & (0xff << shift)) >>> shift);
         }
 
-        DatagramSocket socket = new DatagramSocket(port);
         InetAddress client = InetAddress.getByName(hostname);
         DatagramPacket packet = new DatagramPacket(data, 4, client, port);
-        socket.send(packet);
+        serverSocket.send(packet);
 
         // now send the payload
         packet = new DatagramPacket(Buf, Buf.length, client, port);
-        socket.send(packet);
+        serverSocket.send(packet);
     }
 
     @Override

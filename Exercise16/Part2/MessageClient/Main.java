@@ -6,7 +6,7 @@ package MessageClient;
 public class Main {
     public static void main(String [ ] args) {
 
-        MessageClient messageClient = new MessageClient(6666);
+        MessageClient messageClient = new MessageClient();
         messageClient.run();
     }
 }
