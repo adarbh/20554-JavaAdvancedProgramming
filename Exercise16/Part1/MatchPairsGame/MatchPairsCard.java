@@ -32,6 +32,13 @@ public class MatchPairsCard implements Serializable {
     }
 
     @Override
+    public int hashCode() {
+        int result = (isRevealed ? 1 : 0);
+        result = 31 * result + Id;
+        return result;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         MatchPairsCard card;
         card = (MatchPairsCard)obj;

@@ -92,6 +92,9 @@ public class MatchPairsBoardJPanel extends JPanel  implements ActionListener {
 
             add(linePanel);
         }
+
+        revalidate();
+        repaint();
     }
 
     @Override

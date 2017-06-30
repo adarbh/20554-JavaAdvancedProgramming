@@ -10,7 +10,7 @@ import javafx.util.Pair;
 /**
  * Created by Adar on 6/28/2017.
  */
-public class MatchPairsGameProtocolSelectCardsMessageData implements Serializable {
+public class MatchPairsGameProtocolSelectCardsMessageData extends MatchPairsGameProtocolMessageData {
     private ArrayList<Pair> selectedCards;
 
     public MatchPairsGameProtocolSelectCardsMessageData(ArrayList<Pair> selectedCards) {

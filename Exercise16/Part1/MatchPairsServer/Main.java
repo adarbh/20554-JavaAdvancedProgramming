@@ -1,5 +1,7 @@
 package MatchPairsServer;
 
+import MatchPairsGame.IllegalDimensionsException;
+
 /**
  * Created by Adar on 6/24/2017.
  */

@@ -2,12 +2,10 @@ package MatchPairsGameProtocol;
 
 import MatchPairsGame.MatchPairsBoard;
 
-import java.io.Serializable;
-
 /**
  * Created by Adar on 6/29/2017.
  */
-public class MatchPairsGameProtocolUpdateBoardMessageData implements Serializable {
+public class MatchPairsGameProtocolUpdateBoardMessageData extends MatchPairsGameProtocolMessageData {
 
     private MatchPairsBoard board;
     private boolean isPlayerInitiated;

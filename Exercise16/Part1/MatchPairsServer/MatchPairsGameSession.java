@@ -2,6 +2,7 @@ package MatchPairsServer;
 
 import MatchPairsGame.IllegalDimensionsException;
 import MatchPairsGame.MatchPairsBoard;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 
@@ -13,28 +14,69 @@ public class MatchPairsGameSession {
     private ArrayList<MatchPairsGame.MatchPairsConnection> players;
     private int maxPlayersNum;
     private MatchPairsBoard board;
+    private ArrayList<Pair> playersScore;
 
-    public MatchPairsGameSession(int maxPlayersNum) {
+
+    public MatchPairsGameSession(int maxPlayersNum, int boardDimensions) throws IllegalDimensionsException {
         this.players = new ArrayList<MatchPairsGame.MatchPairsConnection>();
+        this.playersScore = new ArrayList<Pair>();
         this.maxPlayersNum = maxPlayersNum;
+        createBoard(boardDimensions);
     }
 
-    public void addPlayer(MatchPairsGame.MatchPairsConnection playerSocket, int boardDimensions)
-            throws GameFullException, IllegalDimensionsException, DimensionsDoNotMatchException, DimensionsDoNotMatchException {
+    public void increasePlayerScore(MatchPairsGame.MatchPairsConnection player) {
+        for (int i = 0 ; i < this.playersScore.size() ; i++) {
+            if (player.equals(this.playersScore.get(i).getKey())) {
+                this.playersScore.add(new Pair(player, (int)this.playersScore.get(i).getValue() + 1));
+                this.playersScore.remove(this.playersScore.get(i));
+                break;
+            }
+         }
+    }
+
+    public int getPlayerScore(MatchPairsGame.MatchPairsConnection player) {
+        for (int i = 0 ; i < this.playersScore.size() ; i++) {
+            if (player.equals(this.playersScore.get(i).getKey())) {
+                return (int)this.playersScore.get(i).getValue();
+            }
+        }
+
+        return 0;
+    }
+
+    public boolean isPlayerTheWinner(MatchPairsGame.MatchPairsConnection player) {
+
+        for (int i = 0 ; i < this.players.size() ; i++) {
+            if (!player.equals(this.players.get(i)) && getPlayerScore(player) <= getPlayerScore(this.players.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public ArrayList<Integer> getOtherPlayersScores(MatchPairsGame.MatchPairsConnection player) {
+
+        ArrayList<Integer> otherPlayersScores = new ArrayList<Integer>();
+
+        for (int i = 0 ; i < this.players.size() ; i++) {
+            if (!player.equals(this.players.get(i))) {
+                otherPlayersScores.add(getPlayerScore(this.players.get(i)));
+            }
+        }
+
+        return otherPlayersScores;
+    }
+
+
+    public void addPlayer(MatchPairsGame.MatchPairsConnection playerSocket)
+            throws GameFullException {
         if (this.isGameFull()) {
             throw new GameFullException();
         }
 
-        /* Check if this is the the first player to be added */
-        if (0 == this.players.size()) {
-            createBoard(boardDimensions);
-        } else {
-            if (this.board.getDimensions() != boardDimensions) {
-                throw new DimensionsDoNotMatchException();
-            }
-        }
-
         this.players.add(playerSocket);
+        this.playersScore.add(new Pair(playerSocket, 0));
     }
 
     public boolean isGameFull() {
@@ -59,5 +101,9 @@ public class MatchPairsGameSession {
 
     public ArrayList<MatchPairsGame.MatchPairsConnection> getPlayers() {
         return this.players;
+    }
+
+    public boolean isGameOver() {
+        return this.board.areAllCardsRevealed();
     }
 }

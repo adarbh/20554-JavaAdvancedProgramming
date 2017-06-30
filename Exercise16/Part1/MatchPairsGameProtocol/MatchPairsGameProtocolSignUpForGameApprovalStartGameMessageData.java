@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by Adar on 6/26/2017.
  */
-public class MatchPairsGameProtocolSignUpForGameApprovalStartGameMessageData implements Serializable {
+public class MatchPairsGameProtocolSignUpForGameApprovalStartGameMessageData extends MatchPairsGameProtocolMessageData {
 
     private MatchPairsBoard board;
     private boolean isPlayerFirst;

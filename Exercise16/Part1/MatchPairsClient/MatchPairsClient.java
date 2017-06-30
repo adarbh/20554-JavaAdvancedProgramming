@@ -2,11 +2,8 @@ package MatchPairsClient;
 
 import MatchPairsGame.MatchPairsBoard;
 import MatchPairsGame.MatchPairsBoardJPanel;
-import MatchPairsGameProtocol.MatchPairsGameProtocolMessage;
-import MatchPairsGameProtocol.MatchPairsGameProtocolSignUpForGameApprovalStartGameMessageData;
-import MatchPairsGameProtocol.MatchPairsGameProtocolSignUpForGameMessageData;
+import MatchPairsGameProtocol.*;
 import MatchPairsGame.MatchPairsConnection;
-import MatchPairsGameProtocol.MatchPairsGameProtocolUpdateBoardMessageData;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -19,7 +16,6 @@ public class MatchPairsClient {
 
     private String serverHostname;
     private int serverPort;
-    private int boardDimensions;
     private JFrame frame;
     private String gameTitle;
     private int frameDimensions;
@@ -34,29 +30,46 @@ public class MatchPairsClient {
         //TODO
     }
 
-    private void getBoardDimensionsFromPlayer() {
-        /* Check with max num of colors */
-        this.boardDimensions = 4;
-        //TODO
-    }
-
     private void displayBoard(MatchPairsBoard board, boolean isPlayerFirst, MatchPairsConnection playerSession) {
         //MatchPairsBoardJPanel panel = null;
 
-        frameDimensions = boardDimensions * 50;
+        frameDimensions = board.getDimensions() * 100;
         this.frame.setSize(frameDimensions, frameDimensions);
         panel = new MatchPairsBoardJPanel(board, frameDimensions, isPlayerFirst, playerSession);
-        //panel.repaint();
         this.frame.add(panel);
         frame.setResizable(false);
         frame.setVisible(true);
     }
 
+    private void handleGameOverMessage (MatchPairsGameProtocolMessage message,
+                                                              MatchPairsConnection playerSession) {
+        MatchPairsGameProtocolGameOverMessageData messageData =
+                (MatchPairsGameProtocolGameOverMessageData)message.getMessageData();
+        String endOfGameMessage = "The game is over. ";
+
+        if (messageData.isPlayerTheWinner()) {
+            endOfGameMessage += "You are the winner! \n";
+        } else {
+            endOfGameMessage += "You are not the winner. \n";
+        }
+
+        endOfGameMessage = endOfGameMessage + "Your score: " + messageData.getPlayerScore() + "\n";
+        endOfGameMessage += "Other players scores: ";
+
+        for (int i = 0 ; i < messageData.getOtherPlayersScores().size() ; i++) {
+            endOfGameMessage += messageData.getOtherPlayersScores().get(i) + " ";
+        }
+
+        JOptionPane.showMessageDialog(this.frame, endOfGameMessage);
+    }
+
     private void handleSignUpForGameApprovalStartGameMessage (MatchPairsGameProtocolMessage message,
                                                               MatchPairsConnection playerSession) {
 
-        MatchPairsBoard board = ((MatchPairsGameProtocolSignUpForGameApprovalStartGameMessageData) message.getMessageData()).getBoard();
-        boolean isPlayerFirst = ((MatchPairsGameProtocolSignUpForGameApprovalStartGameMessageData) message.getMessageData()).isPlayerFirst();
+        MatchPairsBoard board =
+                ((MatchPairsGameProtocolSignUpForGameApprovalStartGameMessageData) message.getMessageData()).getBoard();
+        boolean isPlayerFirst =
+                ((MatchPairsGameProtocolSignUpForGameApprovalStartGameMessageData) message.getMessageData()).isPlayerFirst();
         boolean isGameOver = false;
 
         if (isPlayerFirst) {
@@ -79,15 +92,17 @@ public class MatchPairsClient {
                 case ILLEGAL_SELECT_CARDS_ERROR_MESSAGE:
                     System.out.println("Received ILLEGAL_SELECT_CARDS_ERROR_MESSAGE from server.");
                     JOptionPane.showMessageDialog(this.frame, "Illegal cards where selected");
+                    break;
                 case UPDATE_BOARD_MESSAGE:
                     System.out.println("Received UPDATE_BOARD_MESSAGE from server.");
                     MatchPairsGameProtocolUpdateBoardMessageData messageData =
                             (MatchPairsGameProtocolUpdateBoardMessageData) message.getMessageData();
                     panel.setBoard(messageData.getBoard());
                     panel.setIsPlayerTurn(!messageData.isPlayerInitiated());
+                    break;
                 case GAME_OVER_MESSAGE:
                     System.out.println("Received GAME_OVER_MESSAGE from server.");
-                    //handleSignUpForGameApprovalStartGameMessage(message, playerSession);
+                    handleGameOverMessage(message, playerSession);
                     isGameOver = true;
                     break;
                 default:
@@ -134,8 +149,6 @@ public class MatchPairsClient {
 
         System.out.println("Stating a new game");
         getServerDetailsFromPlayer();
-        getBoardDimensionsFromPlayer();
-
 
 
         /* Open connection to server */
@@ -151,13 +164,11 @@ public class MatchPairsClient {
         }
 
 
-
         /* Send a request to sign in to a game */
         MatchPairsGameProtocolMessage message = new MatchPairsGameProtocolMessage(
                 MatchPairsGameProtocolMessage.MatchPairsGameProtocolMessageType.SIGN_UP_FOR_GAME_MESSAGE,
-                new MatchPairsGameProtocolSignUpForGameMessageData(this.boardDimensions));
+                new MatchPairsGameProtocolSignUpForGameMessageData());
         try {
-            System.out.println("Sending SIGN_UP_FOR_GAME_MESSAGE to server.");
             playerSession.getOut().writeObject(message);
             message = (MatchPairsGameProtocolMessage)playerSession.getIn().readObject();
         } catch (IOException|ClassNotFoundException e) {
@@ -166,10 +177,6 @@ public class MatchPairsClient {
 
         /* Wait for the game to start */
         switch (message.getMessageType()) {
-            case ILLEGAL_DIMENSIONS_ERROR_MESSAGE:
-                System.out.println("Received ILLEGAL_DIMENSIONS_ERROR_MESSAGE from server.");
-                JOptionPane.showMessageDialog(this.frame, "Illegal dimensions");
-                return;
             case SIGN_UP_FOR_GAME_APPROVAL_START_GAME_MESSAGE:
                 System.out.println("Received SIGN_UP_FOR_GAME_APPROVAL_START_GAME_MESSAGE from server.");
                 handleSignUpForGameApprovalStartGameMessage(message, playerSession);
@@ -188,6 +195,13 @@ public class MatchPairsClient {
         } catch (IOException e) {
             return;
         }
+
+        undisplayedBoard();
+    }
+
+    public void undisplayedBoard() {
+        this.frame.remove(panel);
+        this.frame.setVisible(false);
     }
 
     public void run() {
@@ -207,6 +221,7 @@ public class MatchPairsClient {
         }
 
         /* Close the frame */
+        frame.setVisible(false);
         frame.dispose();
     }
 }

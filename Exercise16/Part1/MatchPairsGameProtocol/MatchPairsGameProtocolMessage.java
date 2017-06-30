@@ -9,7 +9,6 @@ public class MatchPairsGameProtocolMessage implements Serializable {
 
     public enum MatchPairsGameProtocolMessageType {
         SIGN_UP_FOR_GAME_MESSAGE,
-        ILLEGAL_DIMENSIONS_ERROR_MESSAGE,
         SIGN_UP_FOR_GAME_APPROVAL_WAIT_FOR_PLAYERS_MESSAGE,
         SIGN_UP_FOR_GAME_APPROVAL_START_GAME_MESSAGE,
         SELECT_CARDS_MESSAGE,
@@ -19,10 +18,10 @@ public class MatchPairsGameProtocolMessage implements Serializable {
     }
 
     MatchPairsGameProtocolMessageType messageType;
-    Object messageData;
+    MatchPairsGameProtocolMessageData messageData;
 
     public MatchPairsGameProtocolMessage(MatchPairsGameProtocolMessageType messageType,
-                                         Object messageData) {
+                                         MatchPairsGameProtocolMessageData messageData) {
         this.messageType = messageType;
         this.messageData = messageData;
     }
@@ -31,7 +30,7 @@ public class MatchPairsGameProtocolMessage implements Serializable {
         return this.messageType;
     }
 
-    public Object getMessageData() {
+    public MatchPairsGameProtocolMessageData getMessageData() {
         return this.messageData;
     }
 }
